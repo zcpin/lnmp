@@ -1,0 +1,24 @@
+version: '3'
+services: 
+    php:
+        build: ./php
+        volumes: 
+            - ./www:/usr/share/nginx/html
+        depends_on: 
+            - mysql
+            - redis
+    nginx:
+        build: ./nginx
+        ports: 
+            - "80:80"
+        volumes: 
+            - ./www:/usr/share/nginx/html
+            - ./nginx/conf/:/etc/nginx/conf.d
+    mysql:
+        build: ./mysql
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment: 
+            - MYSQL_ROOT_PASSWORD=123456
+    redis:
+        build: ./redis
